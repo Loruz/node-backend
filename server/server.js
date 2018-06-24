@@ -1,7 +1,7 @@
 const numCPUs = require('os').cpus().length
 const cluster = require('cluster')
 const http = require('http')
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 4000
 const app = require('../index')
 
 /**
