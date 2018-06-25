@@ -19,6 +19,7 @@
     "mysql": "^2.15.0"
   },
   "devDependencies": {
+    "express-validator": "^5.2.0",
     "faker": "^4.1.0",
     "morgan": "^1.9.0",
     "nodemon": "^1.17.5"

@@ -1,10 +1,6 @@
 const express = require('express')
-const router = express.Router()
+const router = express.Router({})
 
-router.get('/test', (req, res) => {
-  res.send({
-    msg: 'yo'
-  })
-})
+router.use('/auth', require('../controllers/AuthController'))
 
 module.exports = router

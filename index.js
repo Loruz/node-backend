@@ -11,6 +11,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+require('./db/db')
+
 app.use(router)
 
 module.exports = app
