@@ -39,9 +39,15 @@ router.post('/register', [
       }
     })
 ], (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(422).json({errors: errors.array()})
+  const validationErrors = validationResult(req)
+  let errors = {}
+  if (!validationErrors.isEmpty()) {
+    Object.keys(validationErrors.mapped()).forEach(field => {
+      errors[field] = validationErrors.mapped()[field]['msg']
+    })
+  }
+  if (Object.keys(errors).length) {
+    return res.status(422).json({errors: errors})
   }
   let hashedPassword = bcrypt.hashSync(req.body.password, 8)
   User.create({
