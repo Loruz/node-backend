@@ -1,9 +1,18 @@
 module.exports = {
-  validationErrorHandler (errors) {
+  validationErrorHandler (validationResult) {
     let err = {}
-    Object.keys(errors).forEach(field => {
-      err[field] = errors[field]['msg']
-    })
+    if (!validationResult.isEmpty()) {
+      Object.keys(validationResult.mapped()).forEach(field => {
+        err[field] = validationResult.mapped()[field]['msg']
+      })
+    }
     return err
+  },
+  textErrorHandler (text) {
+    return {
+      errors: {
+        message: text
+      }
+    }
   }
 }
