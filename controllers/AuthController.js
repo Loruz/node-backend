@@ -1,5 +1,6 @@
 const express = require('express')
 const {check, validationResult} = require('express-validator/check')
+const {validationErrorHandler} = require('../helpers/errorHandlers')
 const router = express.Router({})
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -32,23 +33,27 @@ router.post('/register', [
     .isLength({min: 6}).withMessage('Password must contain at least 6 characters')
     .custom((value, {req}) => {
       if (value !== req.body.passwordConfirm) {
-        // trow error if passwords do not match
         throw new Error('Passwords don\'t match')
       } else {
         return value
       }
     })
 ], (req, res) => {
+  /*
+  * Check for validation errors and set if any
+  * */
   const validationErrors = validationResult(req)
   let errors = {}
   if (!validationErrors.isEmpty()) {
-    Object.keys(validationErrors.mapped()).forEach(field => {
-      errors[field] = validationErrors.mapped()[field]['msg']
-    })
+    errors = validationErrorHandler(validationErrors.mapped())
   }
   if (Object.keys(errors).length) {
-    return res.status(422).json({errors: errors})
+    return res.status(404).json({errors: errors})
   }
+
+  /*
+  * If no errors hash password generate JWT  and store User to DB
+  * */
   let hashedPassword = bcrypt.hashSync(req.body.password, 8)
   User.create({
     name: req.body.name,
