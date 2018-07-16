@@ -1,2 +1,3 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/bookstore')
+const config = require('../config')
+mongoose.connect(config.db)

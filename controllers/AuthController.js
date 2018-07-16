@@ -1,4 +1,4 @@
-/*
+/**
 * AuthController:
 * @exports router.post (/register)
 * @exports router.post (/login)
@@ -13,13 +13,13 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const User = require('../models/User')
 
-/*
+/**
 * Register user and send jwt token
 * @params: req.body Object containing registering user credentials
 * */
 
 router.post('/register',
-  /*
+  /**
   * Validate given form inputs
   * */
   [check('name')
@@ -71,12 +71,11 @@ router.post('/register',
       let token = jwt.sign({id: user._id}, config.secret, {
         expiresIn: 86400 // expires in 24 hours
       })
-
       res.status(200).send({auth: true, token: token})
     })
   })
 
-/*
+/**
 * Sign in user and send jwt token
 * @params: req.body Object containing registering user credentials
 * */
@@ -104,7 +103,7 @@ router.post('/login',
     * If no errors find User by credentials, generate JWT and sign in.
     * */
 
-    User.findOne({email: req.body.email}, (err, user) => {git
+    User.findOne({email: req.body.email}, (err, user) => {
       if (err) return res.status(500).send(textErrorHandler('Server error.'))
       if (!user) return res.status(404).send(textErrorHandler('User not found.'))
       /*
@@ -118,7 +117,11 @@ router.post('/login',
       let token = jwt.sign({id: user._id}, config.secret, {
         expiresIn: 86400 // expires in 24 hours
       })
-      res.status(200).send({auth: true, token: token})
+      let userData = {
+        email: user.email,
+        name: user.name
+      }
+      res.status(200).send({auth: true, token: token, user: userData})
     })
   })
 

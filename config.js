@@ -1,3 +1,4 @@
 module.exports = {
-  'secret': 'supersecret'
+  'secret': 'supersecret',
+  'db': 'mongodb://localhost/bookstore'
 }
